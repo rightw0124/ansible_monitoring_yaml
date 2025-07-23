@@ -22,7 +22,7 @@
     state: latest
     update_cache: yes
 
-- name: Deploy Grafana config
+- name: Deploy Grafana ini config
   template:
     src: grafana.ini.j2
     dest: /etc/grafana/grafana.ini
@@ -35,4 +35,46 @@
     name: grafana-server
     enabled: yes
     state: started
+
+# ────────────────────────────────────────────────────────────────────────────────
+# provisioning 전처리: 기존 대시보드 디렉터리 깨끗이 초기화
+# ────────────────────────────────────────────────────────────────────────────────
+
+- name: Remove old dashboards directory
+  file:
+    path: /var/lib/grafana/dashboards
+    state: absent
+
+- name: Recreate dashboards directory
+  file:
+    path: /var/lib/grafana/dashboards
+    state: directory
+    owner: grafana
+    group: grafana
+    mode: '0755'
+
+# ────────────────────────────────────────────────────────────────────────────────
+# provisioning 구성 복사
+# ────────────────────────────────────────────────────────────────────────────────
+
+- name: Copy provisioning configs (datasources & providers)
+  copy:
+    src: "{{ role_path }}/files/provisioning/"
+    dest: /etc/grafana/provisioning/
+    owner: root
+    group: root
+    mode: '0644'
+
+- name: Copy dashboard JSON definitions
+  copy:
+    src: "{{ role_path }}/files/dashboards/"
+    dest: /var/lib/grafana/dashboards/
+    owner: grafana
+    group: grafana
+    mode: '0644'
+
+- name: Restart Grafana to apply provisioning
+  service:
+    name: grafana-server
+    state: restarted
 
