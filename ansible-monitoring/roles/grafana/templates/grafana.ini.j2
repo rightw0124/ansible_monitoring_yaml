@@ -1,0 +1,12 @@
+[server]
+protocol = http
+http_port = 3000
+domain = {{ ansible_fqdn }}
+
+[security]
+admin_user = {{ grafana_admin_user | default('admin') }}
+admin_password = {{ grafana_admin_password | default('changeme') }}
+
+[users]
+allow_sign_up = false
+auto_assign_org = true

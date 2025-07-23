@@ -1,0 +1,50 @@
+# 1) 기본 툴 설치
+- name: Ensure basic tooling installed
+  yum:
+    name:
+      - wget
+      - tar
+    state: present
+
+# 2) node_exporter 유저 생성
+- name: Create node_exporter user
+  user:
+    name: node_exporter
+    shell: /usr/sbin/nologin
+    system: true
+
+# 3) 바이너리 다운로드 & 압축 해제
+- name: Download Node Exporter
+  get_url:
+    url: "https://github.com/prometheus/node_exporter/releases/download/v1.7.1/node_exporter-1.7.1.linux-amd64.tar.gz"
+    dest: /tmp/node_exporter.tar.gz
+    mode: '0644'
+
+- name: Unpack Node Exporter
+  unarchive:
+    src: /tmp/node_exporter.tar.gz
+    dest: /opt/
+    remote_src: yes
+    creates: /opt/node_exporter-1.7.1.linux-amd64
+
+- name: Symlink to /opt/node_exporter
+  file:
+    src: /opt/node_exporter-1.7.1.linux-amd64
+    dest: /opt/node_exporter
+    state: link
+
+# 4) systemd 서비스 파일 배포
+- name: Install node_exporter.service
+  copy:
+    src: node_exporter.service
+    dest: /etc/systemd/system/node_exporter.service
+    mode: '0644'
+
+- name: Reload systemd
+  command: systemctl daemon-reload
+
+- name: Enable & start Node Exporter
+  service:
+    name: node_exporter
+    enabled: yes
+    state: started
