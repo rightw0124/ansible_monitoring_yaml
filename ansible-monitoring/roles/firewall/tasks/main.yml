@@ -1,0 +1,11 @@
+# roles/firewall/tasks/main.yml
+---
+- name: firewalld에서 필요한 포트 열기
+  ansible.posix.firewalld:
+    port: "{{ item }}/tcp"
+    permanent: yes
+    state: enabled
+    immediate: yes     # ← 여기를 추가
+  loop: "{{ firewall_ports }}"
+  become: true
+

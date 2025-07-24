@@ -1,12 +1,22 @@
-- name: Install Node Exporter on all target nodes
+- name: Node Exporter 설치 및 포트 열기
   hosts: node_exporters
   become: true
+  vars:
+    firewall_ports:
+      - 9100
   roles:
+    - firewall
     - node_exporter
 
-- name: Install Prometheus & Grafana on monitoring server
+- name: Prometheus & Grafana 설치 및 포트 열기
   hosts: monitoring
   become: true
+  vars:
+    firewall_ports:
+      - 9090
+      - 3000
   roles:
+    - firewall
     - prometheus
     - grafana
+
