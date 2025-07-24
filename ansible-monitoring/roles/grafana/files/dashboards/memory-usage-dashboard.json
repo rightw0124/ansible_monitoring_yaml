@@ -1,19 +1,19 @@
 {
   "id": null,
-  "uid": "cpu-usage-dashboard",
-  "title": "CPU Usage Dashboard",
+  "uid": "memory-usage-dashboard",
+  "title": "Memory Usage Dashboard",
   "schemaVersion": 30,
-  "version": 3,
-  "tags": ["cpu", "node_exporter"],
+  "version": 2,
+  "tags": ["memory", "node_exporter"],
   "timezone": "browser",
   "panels": [
     {
       "type": "graph",
-      "title": "CPU Usage (%)",
+      "title": "Memory Usage (%)",
       "datasource": "Prometheus",
       "targets": [
         {
-          "expr": "100 - (avg by(instance)(irate(node_cpu_seconds_total{mode=\"idle\"}[5m])) * 100)",
+          "expr": "100 * (1 - (node_memory_MemAvailable_bytes / node_memory_MemTotal_bytes))",
           "legendFormat": "{{instance}}",
           "refId": "A"
         }
@@ -42,7 +42,7 @@
           "format": "percent",
           "min": 0,
           "max": 100,
-          "label": "CPU Usage %"
+          "label": "Memory Usage %"
         },
         {
           "show": false
@@ -60,5 +60,4 @@
     "to": "now"
   }
 }
-
 

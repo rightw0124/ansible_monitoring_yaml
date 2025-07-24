@@ -127,11 +127,13 @@ ansible-playbook -i inventory/hosts.ini playbooks/monitoring.yml
 
 ansible-playbook -i inventory/hosts.ini playbooks/monitoring.yml \
   --limit monitoring
-  -> prometheus + grafana 실행
+  
+-> prometheus + grafana 실행
     
 ansible-playbook -i inventory/hosts.ini playbooks/monitoring.yml \
   --limit node_exporters
-  -> node_exporters 실행 
+  
+-> node_exporters 실행 
 
 
 ---
