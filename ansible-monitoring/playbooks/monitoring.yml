@@ -8,15 +8,18 @@
     - firewall
     - node_exporter
 
-- name: Prometheus & Grafana 설치 및 포트 열기
+- name: Prometheus, Alertmanager & Grafana 설치 및 포트 열기
   hosts: monitoring
   become: true
   vars:
     firewall_ports:
-      - 9090
-      - 3000
+      - 9090   # Prometheus
+      - 3000   # Grafana
+      - 9093   # Alertmanager
+    alertmanager_port: 9093
   roles:
     - firewall
+    - alertmanager
     - prometheus
     - grafana
 

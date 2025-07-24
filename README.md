@@ -30,42 +30,57 @@ Rocky Linux 9 환경에서 Prometheus, Grafana, Node Exporter를 Ansible로 자�
 ```text
 ansible_monitoring_yaml/
 ├── README.md
-└── ansible-monitoring/
+└── ansible-monitoring
     ├── ansible.cfg
-    ├── inventory/
-    │   └── hosts.ini           # 호스트 및 그룹 정의
-    ├── playbooks/
-    │   └── monitoring.yml      # 전체 자동화 플레이북
-    └── roles/
-        ├── firewall/
-        │   ├── defaults/
-        │   │   └── main.yml     # firewall_ports 기본 변수
-        │   └── tasks/
-        │       └── main.yml     # firewalld 설치, 서비스 시작, 포트 오픈
-        ├── grafana/
-        │   ├── files/
-        │   │   ├── dashboards/
-        │   │   │   ├── cpu-usage-comparison.json
-        │   │   │   └── cpu-usage-dashboard.json
-        │   │   └── provisioning/
-        │   │       ├── dashboards/
-        │   │       │   └── dashboards.yml
-        │   │       └── datasources/
-        │   │           └── prometheus.yaml
-        │   ├── tasks/
-        │   │   └── main.yml      # Grafana 설치, 설정, 서비스
-        │   └── templates/
-        │       └── grafana.ini.j2
-        ├── node_exporter/
-        │   ├── files/
-        │   │   └── node_exporter.service
-        │   └── tasks/
-        │       └── main.yml      # Node Exporter 설치, 서비스
-        └── prometheus/
-            ├── tasks/
-            │   └── main.yml      # Prometheus 설치, 설정
-            └── templates/
+    ├── inventory
+    │   └── hosts.ini
+    ├── playbooks
+    │   └── monitoring.yml
+    └── roles
+        ├── alertmanager
+        │   ├── defaults
+        │   │   └── main.yml
+        │   ├── handlers
+        │   │   └── main.yml
+        │   ├── tasks
+        │   │   └── main.yml
+        │   └── templates
+        │       └── alertmanager.yml.j2
+        ├── firewall
+        │   ├── defaults
+        │   │   └── main.yml
+        │   └── tasks
+        │       └── main.yml
+        ├── grafana
+        │   ├── files
+        │   │   ├── dashboards
+        │   │   │   ├── cpu-usage-dashboard.json
+        │   │   │   └── memory-usage-dashboard.json
+        │   │   └── provisioning
+        │   │       ├── dashboards
+        │   │       │   └── dashboards.yml
+        │   │       └── datasources
+        │   │           └── prometheus.yaml
+        │   ├── tasks
+        │   │   └── main.yml
+        │   └── templates
+        │       └── grafana.ini.j2
+        ├── node_exporter
+        │   ├── files
+        │   │   └── node_exporter.service
+        │   └── tasks
+        │       └── main.yml
+        └── prometheus
+            ├── files
+            │   └── alert_rules
+            │       └── alerts.yml
+            ├── handlers
+            │   └── main.yml
+            ├── tasks
+            │   └── main.yml
+            └── templates
                 └── prometheus.yml.j2
+
 ```
 
 ---

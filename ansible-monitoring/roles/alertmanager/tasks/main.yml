@@ -1,0 +1,57 @@
+# roles/alertmanager/tasks/main.yml
+---
+- name: yum-utils가 설치되어 있는지 확인
+  yum:
+    name: yum-utils
+    state: present
+  become: true
+
+- name: Prometheus RPM 레포지토리 추가 (Alertmanager 포함)
+  yum_repository:
+    name: prometheus
+    description: Prometheus RPM Release
+    baseurl: https://packagecloud.io/prometheus-rpm/release/el/9/$basearch
+    gpgcheck: no
+    repo_gpgcheck: no
+    enabled: yes
+  become: true
+
+- name: Prometheus RPM GPG 키 가져오기
+  rpm_key:
+    key: https://packagecloud.io/prometheus-rpm/release/gpgkey
+    state: present
+  become: true
+
+- name: Alertmanager 패키지 설치
+  yum:
+    name: alertmanager
+    state: latest
+    update_cache: yes
+  become: true
+
+- name: Alertmanager 설정 디렉터리 생성
+  file:
+    path: /etc/prometheus
+    state: directory
+    owner: root
+    group: root
+    mode: '0755'
+  become: true
+
+- name: Alertmanager 설정 파일 배포
+  template:
+    src: alertmanager.yml.j2
+    dest: /etc/prometheus/alertmanager.yml
+    owner: root
+    group: root
+    mode: '0644'
+  become: true
+  notify: Restart Alertmanager
+
+- name: Alertmanager 서비스 활성화 및 시작
+  service:
+    name: alertmanager
+    state: started
+    enabled: yes
+  become: true
+
