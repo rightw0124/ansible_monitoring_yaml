@@ -1,7 +1,7 @@
 ---
 # Slack 알림을 위한 기본 변수
-slack_webhook_url: "https://hooks.slack.com/services/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"
-slack_channel: "#monitoring-alert"
+slack_webhook_url: "https://hooks.slack.com/services/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"
+slack_channel: "monitoring-alert"
 
 # Alertmanager Listen 포트
 alertmanager_port: 9093
